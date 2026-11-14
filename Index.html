@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Ahmes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header><h1>Simulador Ahmes</h1></header>
+
+    <main>
+        <section id = "editor">  <!--Editor Assembly-->
+            <h2>Programa</h2>
+            <textarea id = "codigo" rows = "16" spellcheck="false" > LDA 129 ADD 128 STA 131 HLT</textarea>
+            <div class = "botoes">
+            <button id = "btn-montar">Montar</button>
+            <button id = "btn-passo">Passo</button>
+            <button id = "btn-executar">Executar</button>
+            <button id = "btn-resetar">Resetar</button>
+            </div>
+        </section>
+
+        <section id="memoria"><h2>Memoria</h2> <!--Memória 16x16-->
+            <table id="tabela-memoria"></table>
+        </section>
+
+        <section id="registradores">
+            <h2>registradores</h2>
+            <p>AC: <span id="reg-ac">0</span></p>
+            <p>PC: <span id="reg-pc">0</span></p>
+
+            <h2>Flags</h2>
+            <p>N: <span id="flag-n">0</span></p>
+            <p>Z: <span id="flag-z">1</span></p>
+            <p>V: <span id="flag-v">0</span></p>
+            <p>C: <span id="flag-c">0</span></p>
+            <p>B: <span id="flag-b">0</span></p>
+        </section>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
