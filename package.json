@@ -1,0 +1,9 @@
+{
+  "name": "simulador-ahmes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simulador didático Ahmes em HTML, CSS e JavaScript puro",
+  "scripts": {
+    "test": "node --test"
+  }
+}

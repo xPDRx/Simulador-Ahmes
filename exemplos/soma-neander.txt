@@ -1,0 +1,8 @@
+; Formato compatível com a listagem textual gerada pelo conversor Neander.
+; Endereço  Byte  Operando (quando existir)  Mnemônico ilustrativo
+0 32 129 LDA 129
+2 48 128 ADD 128
+4 16 131 STA 131
+6 240 HLT
+128 126
+129 4
