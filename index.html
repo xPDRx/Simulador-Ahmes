@@ -1,29 +1,82 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Simulador didático da arquitetura Ahmes, com montador Assembly, memória e execução passo a passo.">
+  <meta name="description" content="Simulador didático da arquitetura Ahmes.">
   <title>Simulador Ahmes</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="topbar">
     <div class="topbar__inner">
-      <div>
-        <p class="eyebrow">ARQUITETURA DE COMPUTADORES</p>
-        <h1>Simulador <span>Ahmes</span></h1>
-        <p class="subtitle">Monte, execute e acompanhe um programa Assembly.</p>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">A</div>
+        <div class="brand-info">
+          <p class="eyebrow">ARQUITETURA DE COMPUTADORES</p>
+          <h1>Simulador <span>Ahmes</span></h1>
+          <p class="subtitle">Monte, execute e acompanhe programas Assembly.</p>
+        </div>
       </div>
       <span class="version">Projeto acadêmico · 1.0</span>
     </div>
   </header>
 
   <main class="layout">
+
+    <!-- Estado atual do processador -->
+    <section class="panel registers-panel" aria-labelledby="registers-title">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">01 / PROCESSADOR</p>
+          <h2 id="registers-title">Estado da CPU</h2>
+        </div>
+        <span id="cpu-status" class="status status--idle">Parado</span>
+      </div>
+
+      <div class="cpu-content">
+        <div class="register-grid">
+          <div class="register-card">
+            <span>AC <small>Acumulador</small></span>
+            <strong id="reg-ac">0</strong>
+            <em id="reg-ac-hex">0x00</em>
+          </div>
+          <div class="register-card">
+            <span>PC <small>Contador de programa</small></span>
+            <strong id="reg-pc">0</strong>
+            <em id="reg-pc-hex">0x00</em>
+          </div>
+        </div>
+
+        <div class="flags-area">
+          <h3>Flags</h3>
+          <div class="flags" id="flags">
+            <div class="flag" data-flag="n">
+              <span>N</span><strong id="flag-n">0</strong><small>Negativo</small>
+            </div>
+            <div class="flag" data-flag="z">
+              <span>Z</span><strong id="flag-z">1</strong><small>Zero</small>
+            </div>
+            <div class="flag" data-flag="v">
+              <span>V</span><strong id="flag-v">0</strong><small>Overflow</small>
+            </div>
+            <div class="flag" data-flag="c">
+              <span>C</span><strong id="flag-c">0</strong><small>Carry</small>
+            </div>
+            <div class="flag" data-flag="b">
+              <span>B</span><strong id="flag-b">0</strong><small>Borrow</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editor do programa -->
     <section class="panel editor-panel" aria-labelledby="editor-title">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">01 / PROGRAMA</p>
+          <p class="eyebrow">02 / PROGRAMA</p>
           <h2 id="editor-title">Editor Assembly</h2>
         </div>
         <label class="file-button" for="arquivo">Abrir arquivo</label>
@@ -31,6 +84,7 @@
       </div>
 
       <textarea id="codigo" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Código Assembly"></textarea>
+
       <div class="editor-footer">
         <span id="contador-linhas">0 linhas</span>
         <span>Comentários iniciados por <code>;</code></span>
@@ -45,7 +99,10 @@
         <button id="btn-limpar" class="button button--ghost button--danger">Limpar memória</button>
       </div>
 
-      <div id="mensagem" class="message" role="status" aria-live="polite">Pronto. Monte um programa para começar.</div>
+      <div id="mensagem" class="message" role="status" aria-live="polite">
+        Pronto. Monte um programa para começar.
+      </div>
+
       <div class="current-instruction">
         <span class="eyebrow">INSTRUÇÃO ATUAL</span>
         <strong id="instrucao-atual">—</strong>
@@ -53,83 +110,83 @@
       </div>
     </section>
 
+    <!-- Memória principal -->
     <section class="panel memory-panel" aria-labelledby="memory-title">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">02 / ARMAZENAMENTO</p>
+          <p class="eyebrow">03 / ARMAZENAMENTO</p>
           <h2 id="memory-title">Memória principal</h2>
         </div>
         <span class="panel-tag">256 bytes</span>
       </div>
+
       <div class="memory-legend">
-        <span><i class="legend-dot legend-dot--pc"></i> PC</span>
-        <span><i class="legend-dot legend-dot--changed"></i> Alterado</span>
+        <span><i class="legend-dot legend-dot--pc"></i> Posição do PC</span>
+        <span><i class="legend-dot legend-dot--changed"></i> Posição alterada</span>
       </div>
+
       <div class="memory-scroll">
         <table id="tabela-memoria" aria-label="Memória de 256 posições"></table>
       </div>
+
       <div class="memory-footer">
         <span>Endereços em hexadecimal</span>
         <span>Valores em decimal</span>
       </div>
     </section>
 
-    <aside class="side-column">
-      <section class="panel registers-panel" aria-labelledby="registers-title">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">03 / PROCESSADOR</p>
-            <h2 id="registers-title">Registradores</h2>
-          </div>
-          <span id="cpu-status" class="status status--idle">Parado</span>
-        </div>
-        <div class="register-grid">
-          <div class="register-card"><span>AC <small>Acumulador</small></span><strong id="reg-ac">0</strong><em id="reg-ac-hex">0x00</em></div>
-          <div class="register-card"><span>PC <small>Contador</small></span><strong id="reg-pc">0</strong><em id="reg-pc-hex">0x00</em></div>
-        </div>
-        <h3>Flags</h3>
-        <div class="flags" id="flags">
-          <div class="flag" data-flag="n"><span>N</span><strong id="flag-n">0</strong><small>Negativo</small></div>
-          <div class="flag" data-flag="z"><span>Z</span><strong id="flag-z">1</strong><small>Zero</small></div>
-          <div class="flag" data-flag="v"><span>V</span><strong id="flag-v">0</strong><small>Overflow</small></div>
-          <div class="flag" data-flag="c"><span>C</span><strong id="flag-c">0</strong><small>Carry</small></div>
-          <div class="flag" data-flag="b"><span>B</span><strong id="flag-b">0</strong><small>Borrow</small></div>
-        </div>
-      </section>
-
-      <section class="panel history-panel" aria-labelledby="history-title">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">04 / ACOMPANHAMENTO</p>
-            <h2 id="history-title">Execução</h2>
-          </div>
-          <span id="contador-passos" class="panel-tag">0 passos</span>
-        </div>
-        <ol id="historico" class="history-list">
-          <li class="history-empty">As instruções executadas aparecerão aqui.</li>
-        </ol>
-      </section>
-    </aside>
-
-    <section class="panel help-panel">
+    <!-- Histórico -->
+    <section class="panel history-panel" aria-labelledby="history-title">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">CONSULTA RÁPIDA</p>
-          <h2>Instruções disponíveis</h2>
+          <p class="eyebrow">04 / ACOMPANHAMENTO</p>
+          <h2 id="history-title">Histórico de execução</h2>
+        </div>
+        <span id="contador-passos" class="panel-tag">0 passos</span>
+      </div>
+
+      <ol id="historico" class="history-list">
+        <li class="history-empty">As instruções executadas aparecerão aqui.</li>
+      </ol>
+    </section>
+
+    <!-- Consulta de instruções -->
+    <section class="panel help-panel" aria-labelledby="help-title">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">05 / CONSULTA</p>
+          <h2 id="help-title">Instruções disponíveis</h2>
         </div>
         <a href="docs/arquitetura-e-instrucoes.md" target="_blank" rel="noopener">Ver documentação</a>
       </div>
+
       <div class="instruction-groups">
-        <div><h3>Memória e dados</h3><p><code>LDA</code> <code>STA</code> <code>DB</code> <code>ORG</code></p></div>
-        <div><h3>Aritmética e lógica</h3><p><code>ADD</code> <code>SUB</code> <code>AND</code> <code>OR</code> <code>NOT</code></p></div>
-        <div><h3>Desvios</h3><p><code>JMP</code> <code>JN</code> <code>JP</code> <code>JZ</code> <code>JNZ</code> <code>JV</code> <code>JNV</code> <code>JC</code> <code>JNC</code> <code>JB</code> <code>JNB</code></p></div>
-        <div><h3>Deslocamento e controle</h3><p><code>SHR</code> <code>SHL</code> <code>ROR</code> <code>ROL</code> <code>NOP</code> <code>HLT</code></p></div>
+        <div>
+          <h3>Memória e dados</h3>
+          <p><code>LDA</code> <code>STA</code> <code>DB</code> <code>ORG</code></p>
+        </div>
+        <div>
+          <h3>Aritmética e lógica</h3>
+          <p><code>ADD</code> <code>SUB</code> <code>AND</code> <code>OR</code> <code>NOT</code></p>
+        </div>
+        <div>
+          <h3>Desvios</h3>
+          <p><code>JMP</code> <code>JN</code> <code>JP</code> <code>JZ</code> <code>JNZ</code> <code>JV</code> <code>JNV</code> <code>JC</code> <code>JNC</code> <code>JB</code> <code>JNB</code></p>
+        </div>
+        <div>
+          <h3>Deslocamento e controle</h3>
+          <p><code>SHR</code> <code>SHL</code> <code>ROR</code> <code>ROL</code> <code>NOP</code> <code>HLT</code></p>
+        </div>
       </div>
-      <p class="notice"><strong>Nota acadêmica:</strong> como o enunciado não trouxe a especificação formal do Ahmes, este simulador mantém e documenta o conjunto de instruções do protótipo inicial. As convenções adotadas estão descritas no README e na documentação.</p>
+
+      <p class="notice">
+        <strong>Nota acadêmica:</strong> como o enunciado não trouxe a especificação formal do Ahmes, as convenções adotadas estão descritas no README e na documentação.
+      </p>
     </section>
   </main>
 
   <footer>Simulador Ahmes · Projeto acadêmico de Arquitetura de Computadores</footer>
+
   <script src="js/ahmes.js"></script>
   <script src="js/interface.js"></script>
 </body>

@@ -2,7 +2,7 @@
 
 Projeto acadêmico de simulador de uma máquina de 8 bits, desenvolvido em HTML, CSS e JavaScript puro. A aplicação permite escrever um programa Assembly, montar os bytes na memória, executar instruções individualmente ou em sequência e acompanhar memória, acumulador, contador de programa e flags.
 
-> **Sobre a arquitetura:** o enunciado recebido não apresenta uma especificação formal do Ahmes. O projeto mantém a tabela de instruções e os códigos numéricos que já existiam no protótipo inicial. Portanto, a documentação descreve as convenções implementadas aqui, sem afirmar que sejam uma especificação oficial do Ahmes.
+> **Sobre a arquitetura:** o material de referência apresenta uma implementação didática do Neander em C, com palavras de 8 bits, 256 posições de memória e um conjunto próprio de instruções. Ele não contém uma especificação formal completa do Ahmes. Por isso, este simulador organiza uma proposta executável para o trabalho, documentando explicitamente as instruções e convenções implementadas. A tabela final de opcodes e as regras de flags devem ser validadas com o professor ou com o enunciado, caso sejam fornecidos.
 
 ## 1. Como executar
 
@@ -106,7 +106,7 @@ Os testes verificam montagem, limites de memória, soma, subtração, flags, des
 - A desmontagem automática de memória importada não é feita, pois bytes de dados podem coincidir com opcodes.
 - O histórico visual mantém as 80 execuções mais recentes.
 - A execução automática possui limite de 10.000 instruções para evitar loops intermináveis na interface.
-- As regras de flags e a tabela de opcodes são as convenções preservadas do protótipo inicial e precisam ser comparadas com uma especificação oficial caso ela seja disponibilizada.
+- As regras de flags e a tabela de opcodes representam a implementação atual do projeto; ainda precisam ser confirmadas como a especificação exigida para o Ahmes.
 
 ## 7. Tecnologias
 
@@ -115,6 +115,10 @@ Os testes verificam montagem, limites de memória, soma, subtração, flags, des
 - JavaScript puro (sem frameworks)
 - Node.js apenas para executar os testes automatizados
 
-## 8. Observação sobre o trabalho
+## 8. Interface
+
+A interface foi organizada para manter o fluxo de uso evidente: escrever o programa, montar, executar e observar o estado da máquina. A memória, os registradores e o histórico ficam separados em áreas próprias, com cores discretas para indicar o endereço apontado pelo PC e posições alteradas. O layout se adapta a telas menores.
+
+## 9. Observação sobre o trabalho
 
 O simulador foi organizado para fins didáticos. O código contém comentários curtos próximos às partes relevantes, evitando blocos extensos de comentários e mantendo a leitura direta.
